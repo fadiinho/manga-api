@@ -7,8 +7,7 @@ from PyForgeAPI import Routes, Response, Request
 
 from .controllers import search_by_name
 
-# Using `.cors()` until it gets fixed on the package
-routes = Routes(debug=True).cors()
+routes = Routes(debug=True)
 
 
 @routes.get("/")
