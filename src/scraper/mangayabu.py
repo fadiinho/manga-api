@@ -67,11 +67,12 @@ class MangaYabuScraper(BaseScraper):
         return self.parse_response(response.json())
 
     def get_manga_by_id(self, manga_id: int):
-        url = self._build_url(f"wp-json/wp/v2/posts/{manga_id}")
+        url = self._build_url(f"wp-json/wp/v2/posts/{manga_id}?")
 
         response = self.client.get(url)
 
         if not response.ok:
+            print(url)
             raise RuntimeError("Manga not found!")
 
-        return response.json()
+        return self.parse_response([response.json()])[0]
