@@ -7,7 +7,9 @@ from PyForgeAPI import Routes, Response, Request
 
 from .controllers import search_by_name
 
-routes = Routes(debug=True)
+DEBUG = False if not (_DEBUG := os.getenv("PORT")) else bool(_DEBUG)
+
+routes = Routes(debug=DEBUG)
 
 
 @routes.get("/")
