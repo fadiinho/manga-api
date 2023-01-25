@@ -5,6 +5,7 @@ from .base_scraper import BaseScraper
 KEYS = ["id", "slug", "link", "title", "_links"]
 
 
+# TODO: Better error handling
 class MangaYabuScraper(BaseScraper):
     def __init__(self):
         super().__init__("https://mangayabu.top")
@@ -64,3 +65,13 @@ class MangaYabuScraper(BaseScraper):
         response = self.client.get(url)
 
         return self.parse_response(response.json())
+
+    def get_manga_by_id(self, manga_id: int):
+        url = self._build_url(f"wp-json/wp/v2/posts/{manga_id}")
+
+        response = self.client.get(url)
+
+        if not response.ok:
+            raise RuntimeError("Manga not found!")
+
+        return response.json()
