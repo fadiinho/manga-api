@@ -1,4 +1,6 @@
-from typing import Any, List, Dict
+import requests
+from bs4 import BeautifulSoup
+from typing import Any, List, Dict, cast
 from urllib.parse import quote
 from .base_scraper import BaseScraper
 
@@ -76,3 +78,38 @@ class MangaYabuScraper(BaseScraper):
             raise RuntimeError("Manga not found!")
 
         return self.parse_response([response.json()])[0]
+
+    def get_images_by_url(self, url):
+        response = requests.get(url)
+
+        html = response.content
+
+        soup = BeautifulSoup(html, features="html.parser")
+
+        images_div = soup.select("div.manga-content img")
+
+        soup = BeautifulSoup(html, features="html.parser")
+
+        if not images_div:
+            raise RuntimeError("Images not found, manga url broken!")
+
+        images: Dict[str, str] = {}
+        for image in images_div:
+            title = cast(str, image.get("title"))
+            src = cast(str, image.get("src"))
+
+            if not src or not title:
+                continue
+
+            images[title] = src
+
+        return images
+
+    def get_images_by_id(self, manga_id: int):
+        manga = self.get_manga_by_id(manga_id)
+
+        url = manga["link"]
+
+        images = self.get_images_by_url(url)
+
+        return images

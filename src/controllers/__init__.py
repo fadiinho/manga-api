@@ -15,3 +15,9 @@ def get_manga_by_id(id: int):
     response = mangayabu.get_manga_by_id(id)
 
     return response
+
+
+def get_images_by_id(id: int):
+    response = mangayabu.get_images_by_id(id)
+
+    return response
