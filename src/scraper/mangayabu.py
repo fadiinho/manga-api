@@ -8,14 +8,20 @@ KEYS = ["id", "slug", "link", "title", "_links"]
 class MangaYabuScraper(BaseScraper):
     def __init__(self):
         super().__init__("https://mangayabu.top")
-        self.options = {"per_page": 1, "order": "asc"}
+        self._options = {"per_page": 1, "order": "asc"}
 
     def _build_url(self, path: str):
         url = f"{self.base_host}/{path}"
-        for (key, value) in self.options.items():
+        for (key, value) in self._options.items():
             url += f"&{key}={value}"
 
         return url
+
+    def set_options(self, options: Dict[str, Any]):
+        for _, (k, v) in enumerate(options.items()):
+            self._options[k] = v
+
+        return self
 
     def parse_links(self, target: Dict[str, Any]) -> Dict[str, str] | str:
         result = {}
