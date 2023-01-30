@@ -74,4 +74,4 @@ async def images(req: Request, res: Response):
         ).status(404).send()
         return
 
-    res.json(manga).status(200).send()
+    res.json({"data": manga}).status(200).send()

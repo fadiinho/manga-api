@@ -93,7 +93,7 @@ class MangaYabuScraper(BaseScraper):
         if not images_div:
             raise RuntimeError("Images not found, manga url broken!")
 
-        images: Dict[str, str] = {}
+        images: List[Dict[str, str]] = []
         for image in images_div:
             title = cast(str, image.get("title"))
             src = cast(str, image.get("src"))
@@ -101,7 +101,7 @@ class MangaYabuScraper(BaseScraper):
             if not src or not title:
                 continue
 
-            images[title] = src
+            images.append({ "pageTitle": title, "src": src})
 
         return images
 
